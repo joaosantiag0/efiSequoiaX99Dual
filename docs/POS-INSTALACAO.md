@@ -116,3 +116,32 @@ placa, basta desabilitar essa kext no config.
 - **Gráficos**: `agdpmod=pikera` já está nos boot-args; não remova com RX 6000.
 - **OpenCore futuros**: baixe o release novo, substitua `BOOTx64.efi`, `OpenCore.efi`,
   `Drivers/*` e rode `ocvalidate` no seu `config.plist` antes de reiniciar.
+
+## 9. Placa sem Bluetooth: silenciar o bluetoothd
+
+Se a máquina não tem controladora Bluetooth (comum em X99 dual Xeon), o log de
+boot enche de linhas repetidas:
+
+```
+AppleKeyStore: unexpected session uid:-1 requested by: bluetoothd (645)
+[AppleKeyStore] operation failed (sel: 7 ret: e00002f0, -1)
+```
+
+Não é panic, não é o driver de vídeo: o `bluetoothd` tenta abrir uma sessão de
+keybag que não existe e entra em laço. A correção é desativar o serviço:
+
+```bash
+sudo ./scripts/disable-bluetoothd.sh
+# equivale a:
+#   sudo launchctl disable system/com.apple.bluetoothd
+#   sudo launchctl bootout system/com.apple.bluetoothd
+```
+
+Para reverter (se um dia instalar uma placa Bluetooth):
+
+```bash
+sudo launchctl enable system/com.apple.bluetoothd
+```
+
+> Dica geral: rode com `-v` nos boot-args só durante o diagnóstico. Em uso normal,
+> remova o `-v` — o log deixa de aparecer na tela e o boot fica limpo.
