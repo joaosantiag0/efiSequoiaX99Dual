@@ -1,0 +1,17 @@
+# Instaladores e binários de trabalho (não versionar)
+_downloads/
+_build/
+
+# Backups de EFI de máquinas reais: contêm Serial/MLB/UUID válidos
+variants/referencia-mac-real/
+variants/referencia-mac-real-EFI.zip
+
+# Artefatos compactados
+*.zip
+*.tar.gz
+*.dmg
+
+# Lixo de sistema
+.DS_Store
+._*
+__pycache__/
